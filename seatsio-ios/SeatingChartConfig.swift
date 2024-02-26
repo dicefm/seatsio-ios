@@ -435,21 +435,30 @@ public class SeatingChartConfig: Encodable {
         return self
     }
 
-    public func objectColor(selected: UIColor, available: UIColor, unavailable: UIColor, notForSale: UIColor, noCategory: UIColor) -> Self {
+    public func objectColor(selected: UIColor, available: UIColor, unavailable: UIColor, notForSale: UIColor, noCategory: UIColor, previouslyBooked: UIColor, bookedIDs: [String] = []) -> Self {
         let rgbAvailable = uiColorToJavascriptRGB(available)
         let rgbSelected = uiColorToJavascriptRGB(selected)
         let rgbNotAvailable = uiColorToJavascriptRGB(unavailable)
         let rbgNotForSale = uiColorToJavascriptRGB(notForSale)
         let rbgNoCategory = uiColorToJavascriptRGB(notForSale)
+        let rbgPreviouslyBooked = uiColorToJavascriptRGB(previouslyBooked)
 
         let jsFunction = """
             (object, dflt, extraConfig) => {
                 if (object == null || object.category == null) {
                     return '\(rbgNoCategory)';
                 }
+
+                var booked = [\(bookedIDs.map { "\"\($0)\"" }.joined(separator: ", "))];
+
                 object.category.color = '\(rgbAvailable)'
+
                 if (object.category.safeColor) {
                   object.category.safeColor.cachedCss = '\(rgbAvailable)'
+                }
+
+                if (booked.includes(object.id)) {
+                    return '\(rbgPreviouslyBooked)'
                 }
 
                 if (object.selected) {
