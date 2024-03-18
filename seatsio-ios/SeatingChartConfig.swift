@@ -457,7 +457,7 @@ public class SeatingChartConfig: Encodable {
                   object.category.safeColor.cachedCss = '\(rgbAvailable)'
                 }
 
-                if (booked.includes(object.id)) {
+                if (booked.includes(object.id) && !object.selected) {
                     return '\(rbgPreviouslyBooked)'
                 }
 
