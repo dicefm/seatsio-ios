@@ -1,11 +1,6 @@
 import Foundation
 
 public struct SeatsioObject: Decodable {
-
-    enum CodingKeys: String, CodingKey {
-        case objectType, label, labels, id, category, center, pricing, status, forSale, selectable, inSelectableChannel, selected, selectedTicketType, extraData, accessible, companionSeat, restrictedView, disabledBySocialDistancingRules, capacity, numBooked, numFree, numSelected, selectionPerTicketType, sectionCategory, numberOfSelectableObjects, numberOfSelectedObjects, selectableCategories, isInteractive
-    }
-
     public let objectType: String
     public let label: String
     public let labels: Labels
@@ -41,7 +36,7 @@ public struct SeatsioObject: Decodable {
 
     public init(objectType: String, label: String, labels: Labels, id: String, category: Category? = nil, center: Point? = nil, pricing: Pricing? = nil, status: String? = nil, forSale: Bool? = nil,
                 selectable: Bool? = nil, inSelectableChannel: Bool? = nil, selected: Bool? = nil, selectedTicketType: String? = nil, accessible: Bool? = nil, companionSeat: Bool? = nil, restrictedView: Bool? = nil,
-                disabledBySocialDistancingRules: Bool? = nil, parent: SeatParent?, displayObjectType: String?, capacity: Int? = nil, numBooked: Int? = nil, numFree: Int? = nil, numSelected: Int? = nil, selectionPerTicketType: [String: Int]? = nil,
+                disabledBySocialDistancingRules: Bool? = nil, parent: SeatParent? = nil, displayObjectType: String? = nil, capacity: Int? = nil, numBooked: Int? = nil, numFree: Int? = nil, numSelected: Int? = nil, selectionPerTicketType: [String: Int]? = nil,
                 sectionCategory: Category? = nil, numberOfSelectableObjects: Int? = nil, numberOfSelectedObjects: Int? = nil, selectableCategories: [Category]? = nil, isInteractive: Bool? = nil) {
         self.objectType = objectType
         self.label = label
