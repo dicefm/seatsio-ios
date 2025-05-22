@@ -1,7 +1,7 @@
 #!/usr/bin/env zx
 
 /*
-* Script to release the seats.io java lib.
+* Script to release the seats.io ios lib.
 *   - changes the version number in README.md
 *   - changes the version number in build.gradle
 *   - creates the release in Gihub (using gh cli)
@@ -10,15 +10,15 @@
 * Prerequisites:
 *   - zx installed (https://github.com/google/zx)
 *   - gh cli installed (https://cli.github.com/)
-*   - semver cli installed (https://github.com/fsaintjacques/semver-tool)
 *
 * Usage:
-*   zx ./release.mjs -v major/minor -n "release notes"
+*   yarn zx ./release.mjs -v major/minor -n "release notes"
 * */
 
 // don't output the commands themselves
 $.verbose = false
 
+const semver = require('semver')
 const versionToBump = getVersionToBump()
 const latestVersion = await fetchLatestReleasedVersionNumber()
 const nextVersion = await determineNextVersionNumber(latestVersion)
@@ -41,12 +41,12 @@ async function fetchLatestReleasedVersionNumber() {
 }
 
 async function determineNextVersionNumber(previous) {
-    return (await $`semver bump ${versionToBump} ${previous}`).stdout.trim()
+    return semver.inc(previous, versionToBump)
 }
 
 async function bumpVersionInFiles() {
     await replaceInFile("seatsio.podspec", `= '${latestVersion}'`, `= '${nextVersion}'`)
-    await replaceInFile("README.md", `pod 'seatsio', '${latestVersion}'`, `pod 'seatsio', '${nextVersion}'`)
+    await replaceInFile("README.md", latestVersion, nextVersion)
 }
 
 async function replaceInFile(filename, latestVersion, nextVersion) {
@@ -57,7 +57,7 @@ async function replaceInFile(filename, latestVersion, nextVersion) {
             }
             return text
         })
-        .then(text => text.replace(latestVersion, nextVersion))
+        .then(text => text.replaceAll(latestVersion, nextVersion))
         .then(text => fs.writeFileSync(filename, text))
         .then(() => gitAdd(filename))
 }
