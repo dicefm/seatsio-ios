@@ -4,14 +4,22 @@
 
 ## Introduction
 
-seatsio-ios allows rendering seats.io seating charts inside an iOS application. It supports iOS 9.0 and newer.
+seatsio-ios allows rendering seats.io seating charts inside an iOS application. It supports iOS 12.0 and newer.
 
 ## Installation
 
 Add this to your podfile:
 
 ```
-pod 'seatsio', '14.4.0'
+pod 'seatsio', '19.1.0'
+```
+
+Or if you prefer Swift Package Manager:
+
+```
+dependencies: [
+    .package(url: "https://github.com/seatsio/seatsio-ios", from: "19.1.0")
+]
 ```
 
 ## Usage
@@ -31,10 +39,14 @@ class SeatingChartSample: UIViewController {
         self.view = seatsio
     }
 
+    override func viewDidDisappear(_ animated: Bool) {
+        seatsio.cleanup()
+        seatsio = nil
+    }
 }
 ```
 
-You can find the all the configuration options at https://docs.seats.io/docs/renderer-configure-your-floor-plan
+You can find the all the configuration options at https://docs.seats.io/docs/renderer/embed-a-floor-plan
 
 ### Simple pricing
 
@@ -90,6 +102,17 @@ SeatingChartConfig()
     })
     .onObjectDeselected({ (object, ticketType) in
         print(object, ticketType)
+    })
+```
+
+### extraData
+
+`extraData` on objects is exposed as a `JSON` object from [`SwiftyJSON`](https://github.com/SwiftyJSON/SwiftyJSON):
+
+```swift
+SeatingChartConfig()
+    .onObjectSelected({ (object, ticketType) in
+        print(object.extraData!["foo"])
     })
 ```
 
